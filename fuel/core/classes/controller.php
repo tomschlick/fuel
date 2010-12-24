@@ -12,11 +12,11 @@
  * @link		http://fuelphp.com
  */
 
-namespace Fuel\Core\Controller;
+namespace Fuel\Core;
 
-use Fuel\App as App;
+use Fuel\App;
 
-class Base {
+class Controller {
 
 	/**
 	 * @var	object	The current Request object

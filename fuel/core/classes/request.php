@@ -117,7 +117,7 @@ class Request {
 
 			$action or $action = 'index';
 
-			$class = 'Fuel\\App\\Controller\\'.ucfirst($controller);
+			$class = 'Fuel\\App\\Controller_'.ucfirst($controller);
 			$method = 'action_'.$action;
 
 			if (class_exists($class))
@@ -249,7 +249,7 @@ class Request {
 	{
 		logger(Fuel::L_INFO, 'Called', __METHOD__);
 
-		$controller_prefix = 'Fuel\\App\\'.($this->module ? ucfirst($this->module).'\\' : '').'Controller\\';
+		$controller_prefix = 'Fuel\\App\\'.($this->module ? ucfirst($this->module).'\\' : '').'Controller_';
 		$method_prefix = 'action_';
 
 		$class = $controller_prefix.($this->directory ? ucfirst($this->directory).'_' : '').ucfirst($this->controller);

@@ -20,8 +20,6 @@ Autoloader::add_namespaces(array(
 
 Autoloader::add_namespace_aliases(array(
 	'Fuel\\App' => 'Fuel\\Core',
-	'Fuel\\App\\Model' => 'Fuel\\App',
-	'Fuel\\App\\Controller' => 'Fuel\\App',
 ));
 
 Autoloader::add_aliases(array(

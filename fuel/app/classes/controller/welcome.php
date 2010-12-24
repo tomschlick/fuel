@@ -1,8 +1,8 @@
 <?php
 
-namespace Fuel\App\Controller;
+namespace Fuel\App;
 
-class Welcome extends Controller\Base {
+class Controller_Welcome extends Controller {
 
 	public $default_action = 'index';
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Fuel\Core\Controller;
+namespace Fuel\Core;
 
-use Fuel\App as App;
+use Fuel\App;
 
-abstract class Rest extends App\Controller\Base
+abstract class Controller_Rest extends App\Controller
 {
 	protected $rest_format = NULL; // Set this in a controller to use a default format
 
