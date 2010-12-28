@@ -134,7 +134,11 @@ abstract class Session_Driver {
 	 */
 	public function get($name, $default = null)
 	{
-		if (isset($this->data[$name]))
+		if (is_null($name))
+		{
+			return $this->data;
+		}
+		elseif (isset($this->data[$name]))
 		{
 			return $this->data[$name];
 		}
@@ -332,7 +336,16 @@ abstract class Session_Driver {
 	 */
 	public function get_flash($name, $default = null)
 	{
-		if (isset($this->flash[$this->config['flash_id'].'::'.$name]))
+		if (is_null($name))
+		{
+			$default = array();
+			foreach($this->flash as $key => $value)
+			{
+				$key = substr($key, strpos($key, '::')+2);
+				$default[$key] = $value;
+			}
+		}
+		elseif (isset($this->flash[$this->config['flash_id'].'::'.$name]))
 		{
 			$this->flash[$this->config['flash_id'].'::'.$name]['state'] = '';
 			return $this->flash[$this->config['flash_id'].'::'.$name]['value'];
@@ -351,7 +364,14 @@ abstract class Session_Driver {
 	 */
 	public function keep_flash($name)
 	{
-		if (isset($this->flash[$this->config['flash_id'].'::'.$name]))
+		if (is_null($name))
+		{
+			foreach($this->flash as $key => $value)
+			{
+				$this->flash[$key]['state'] = 'new';
+			}
+		}
+		elseif (isset($this->flash[$this->config['flash_id'].'::'.$name]))
 		{
 			$this->flash[$this->config['flash_id'].'::'.$name]['state'] = 'new';
 		}
@@ -375,7 +395,11 @@ abstract class Session_Driver {
 	 */
 	public function delete_flash($name)
 	{
-		if (isset($this->flash[$this->config['flash_id'].'::'.$name]))
+		if (is_null($name))
+		{
+			$this->flash = array();
+		}
+		elseif (isset($this->flash[$this->config['flash_id'].'::'.$name]))
 		{
 			unset($this->flash[$this->config['flash_id'].'::'.$name]);
 		}
@@ -426,20 +450,6 @@ abstract class Session_Driver {
 	public function get_config($name)
 	{
 		return isset($this->config[$name]) ? $this->config[$name] : null;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * get the encrypted cookie
-	 *
-	 * @access	public
-	 * @return  string
-	 */
-	public function get_cookie()
-	{
-		// encrypt the session keys and return it
-		return App\Crypt::encode(array($this->keys));
 	}
 
 	// --------------------------------------------------------------------
@@ -548,13 +558,13 @@ abstract class Session_Driver {
 	 */
 	 protected function _get_cookie()
 	 {
-		// fetch the cookie
-		$cookie = App\Cookie::get($this->config['cookie_name'], false);
+		// was the cookie posted?
+		$cookie = App\Input::get_post($this->config['post_cookie_name'], false);
 
-		// if not found, check for the post_cookie variable
+		// if not found, fetch the regular cookie
 		if ($cookie === false)
 		{
-			$cookie = App\Input::get_post($this->config['post_cookie_name'], false);
+			$cookie = App\Cookie::get($this->config['cookie_name'], false);
 		}
 
 		if ($cookie !== false)
